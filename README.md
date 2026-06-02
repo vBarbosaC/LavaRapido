@@ -25,43 +25,6 @@ VITE_SUPABASE_URL=sua-url-do-supabase
 VITE_SUPABASE_PUBLISHABLE_KEY=sua-chave-publica-do-supabase
 ```
 
-No Supabase, rode o SQL do arquivo:
-
-```text
-supabase/setup.sql
-```
-
-Esse SQL cria as tabelas `veiculos` e `servicos_estetica`, alem de liberar as permissoes necessarias para o app acessar o banco.
-
-## Login E Cadastro De Operador
-
-O sistema possui um fluxo simples de acesso:
-
-- o usuario informa e-mail e senha;
-- no cadastro, o sistema mostra uma mensagem de sucesso;
-- depois do cadastro, o usuario volta para a tela de login;
-- para entrar no painel, basta fazer login com o cadastro criado.
-
-## Como Rodar
-
-Instale as dependencias:
-
-```bash
-npm install
-```
-
-Inicie o servidor local:
-
-```bash
-npm run dev
-```
-
-Depois acesse:
-
-```text
-http://localhost:5173
-```
-
 ## Arquivos Principais
 
 - `index.html`: layout principal do sistema.
