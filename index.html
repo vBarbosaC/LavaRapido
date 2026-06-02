@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Midnight Garage - Estetica Automotiva</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            color-scheme: dark;
+        }
+
+        body {
+            background:
+                radial-gradient(circle at top left, rgba(250, 204, 21, 0.12), transparent 30rem),
+                linear-gradient(135deg, #080b12 0%, #111827 48%, #0b111f 100%);
+        }
+
+        input, select, button {
+            min-height: 2.5rem;
+        }
+
+        input::placeholder {
+            color: #64748b;
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-100 antialiased">
+    <div id="toast-container" class="fixed right-4 top-4 z-50 flex w-[calc(100%-2rem)] max-w-sm flex-col gap-3"></div>
+
+    <div id="auth-screen" class="min-h-screen grid place-items-center p-4">
+        <section class="w-full max-w-md border border-white/10 bg-slate-950/80 p-6 shadow-2xl backdrop-blur rounded-lg">
+            <div class="mb-6">
+                <p class="text-xs font-bold uppercase tracking-widest text-amber-300">Midnight Garage</p>
+                <h2 id="auth-title" class="mt-2 text-2xl font-black text-white">MIDNIGHT GARAGE</h2>
+            </div>
+
+            <form id="auth-form" class="space-y-4">
+                <label class="block">
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-400">E-mail</span>
+                    <input type="email" id="auth-email" required class="mt-2 block w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white outline-none transition focus:border-amber-300 focus:ring-2 focus:ring-amber-300/20">
+                </label>
+
+                <label class="block">
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Senha</span>
+                    <input type="password" id="auth-password" required class="mt-2 block w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white outline-none transition focus:border-amber-300 focus:ring-2 focus:ring-amber-300/20">
+                </label>
+
+                <button type="submit" id="auth-btn" class="w-full rounded-md bg-amber-300 px-4 py-2 text-sm font-black text-slate-950 transition hover:bg-amber-200">
+                    Entrar no Sistema
+                </button>
+            </form>
+
+            <button id="toggle-auth" class="mt-5 w-full text-center text-xs font-semibold text-slate-400 transition hover:text-amber-300">
+                Primeiro acesso? Cadastre o funcionario
+            </button>
+        </section>
+    </div>
+
+    <div id="app-screen" class="hidden min-h-screen">
+        <header class="sticky top-0 z-20 border-b border-white/10 bg-slate-950/85 backdrop-blur">
+            <nav class="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:justify-between lg:px-6">
+                <div>
+                    <p class="text-xs font-bold uppercase tracking-widest text-amber-300">Midnight Garage</p>
+                    <h1 class="text-xl font-black text-white">Painel Operacional</h1>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-3">
+                    <button id="nav-home" class="rounded-md border border-amber-300/30 bg-amber-300/10 px-4 py-2 text-xs font-black uppercase text-amber-100 transition hover:bg-amber-300 hover:text-slate-950">
+                        Inicio
+                    </button>
+                    <button id="nav-operation" class="rounded-md border border-white/10 bg-slate-900 px-4 py-2 text-xs font-black uppercase text-slate-200 transition hover:bg-slate-800">
+                        Operacao
+                    </button>
+                    <span id="user-display" class="max-w-full truncate rounded-md border border-white/10 bg-slate-900 px-3 py-2 text-xs font-semibold text-slate-300"></span>
+                    <button id="logout-btn" class="rounded-md border border-red-400/30 bg-red-500/10 px-4 py-2 text-xs font-black text-red-200 transition hover:bg-red-500 hover:text-white">
+                        Sair
+                    </button>
+                </div>
+            </nav>
+        </header>
+
+        <main id="home-screen" class="mx-auto max-w-7xl p-4 lg:p-6">
+            <section class="overflow-hidden rounded-lg border border-white/10 bg-slate-950/75 shadow-xl">
+                <div class="grid gap-6 p-5 md:grid-cols-[1.4fr_1fr] lg:p-8">
+                    <div>
+                        <p class="text-xs font-bold uppercase tracking-widest text-emerald-300">Sistema de estetica automotiva</p>
+                        <h2 class="mt-3 text-3xl font-black text-white">Bem-vindo ao Midnight Garage</h2>
+                        <p class="mt-3 max-w-2xl text-sm leading-6 text-slate-300">
+                            Controle de veiculos em atendimento e acompanhamento dos servicos cadastrados para cada cliente.
+                        </p>
+                        <div class="mt-6 flex flex-col gap-3 sm:flex-row">
+                            <button id="btn-start-operation" class="rounded-md bg-amber-300 px-5 py-3 text-xs font-black uppercase text-slate-950 transition hover:bg-amber-200">
+                                Acessar Operacao
+                            </button>
+                            <button id="btn-home-logout" class="rounded-md border border-white/10 bg-slate-900 px-5 py-3 text-xs font-black uppercase text-slate-200 transition hover:bg-slate-800">
+                                Encerrar Sessao
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grid gap-3 sm:grid-cols-2">
+                        <div class="rounded-md border border-white/10 bg-slate-900/80 p-4">
+                            <p class="text-[10px] font-black uppercase tracking-widest text-slate-500">Veiculos</p>
+                            <strong id="home-vehicles-count" class="mt-2 block text-3xl font-black text-white">0</strong>
+                        </div>
+                        <div class="rounded-md border border-white/10 bg-slate-900/80 p-4">
+                            <p class="text-[10px] font-black uppercase tracking-widest text-slate-500">Servicos</p>
+                            <strong id="home-services-count" class="mt-2 block text-3xl font-black text-white">0</strong>
+                        </div>
+                        <div class="rounded-md border border-white/10 bg-slate-900/80 p-4">
+                            <p class="text-[10px] font-black uppercase tracking-widest text-slate-500">Em Andamento</p>
+                            <strong id="home-progress-count" class="mt-2 block text-3xl font-black text-sky-300">0</strong>
+                        </div>
+                        <div class="rounded-md border border-white/10 bg-slate-900/80 p-4">
+                            <p class="text-[10px] font-black uppercase tracking-widest text-slate-500">Prontos</p>
+                            <strong id="home-ready-count" class="mt-2 block text-3xl font-black text-emerald-300">0</strong>
+                        </div>
+                        <div class="rounded-md border border-white/10 bg-slate-900/80 p-4 sm:col-span-2">
+                            <p class="text-[10px] font-black uppercase tracking-widest text-slate-500">Total Servicos</p>
+                            <strong id="home-total-value" class="mt-2 block text-2xl font-black text-amber-200">R$ 0,00</strong>
+                        </div>
+                        <div class="rounded-md border border-white/10 bg-slate-900/80 p-4">
+                            <p class="text-[10px] font-black uppercase tracking-widest text-slate-500">Status</p>
+                            <strong id="home-status" class="mt-2 block text-sm font-black uppercase text-emerald-300">Ativo</strong>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <main id="operation-screen" class="hidden mx-auto grid max-w-7xl grid-cols-1 gap-5 p-4 lg:grid-cols-[22rem_1fr] lg:p-6">
+            <aside class="rounded-lg border border-white/10 bg-slate-950/70 p-4 shadow-xl">
+                <div class="mb-4 flex items-center justify-between gap-3">
+                    <div>
+                        <p class="text-xs font-bold uppercase tracking-widest text-sky-300">Atendimento</p>
+                        <h2 class="text-lg font-black text-white">Veiculos em Servico</h2>
+                    </div>
+                    <span class="rounded-md border border-amber-300/20 bg-amber-300/10 px-2 py-1 text-[10px] font-black uppercase text-amber-200">Ativo</span>
+                </div>
+
+                <form id="vehicle-form" class="mb-5 space-y-3 rounded-md border border-white/10 bg-slate-900/70 p-3">
+                    <input type="hidden" id="vehicle-id">
+                    <label class="block">
+                        <span class="text-[10px] font-black uppercase tracking-widest text-slate-500">Placa</span>
+                        <input type="text" id="vehicle-plate" placeholder="ABC1234" required class="mt-1 w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm font-bold uppercase text-white outline-none transition focus:border-amber-300">
+                    </label>
+
+                    <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-1">
+                        <label class="block">
+                            <span class="text-[10px] font-black uppercase tracking-widest text-slate-500">Marca</span>
+                            <input type="text" id="vehicle-brand" placeholder="Marca" required class="mt-1 w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white outline-none transition focus:border-amber-300">
+                        </label>
+
+                        <label class="block">
+                            <span class="text-[10px] font-black uppercase tracking-widest text-slate-500">Modelo</span>
+                            <input type="text" id="vehicle-model" placeholder="Modelo" required class="mt-1 w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white outline-none transition focus:border-amber-300">
+                        </label>
+                    </div>
+
+                    <button type="submit" id="btn-save-vehicle" class="w-full rounded-md bg-amber-300 px-4 py-2 text-xs font-black uppercase text-slate-950 transition hover:bg-amber-200">
+                        Salvar Veiculo
+                    </button>
+                </form>
+
+                <label class="mb-3 block">
+                    <span class="text-[10px] font-black uppercase tracking-widest text-slate-500">Buscar Veiculo</span>
+                    <input type="search" id="vehicle-search" placeholder="Placa, marca ou modelo" class="mt-1 w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white outline-none transition focus:border-sky-300">
+                </label>
+
+                <div id="vehicles-list" class="max-h-[30rem] space-y-2 overflow-y-auto pr-1"></div>
+            </aside>
+
+            <section class="rounded-lg border border-white/10 bg-slate-950/70 p-4 shadow-xl lg:p-5">
+                <div class="mb-5 flex flex-col gap-3 border-b border-white/10 pb-4 md:flex-row md:items-center md:justify-between">
+                    <div>
+                        <p class="text-xs font-bold uppercase tracking-widest text-emerald-300">Ordem de servico</p>
+                        <h2 class="text-lg font-black text-white">Detailing</h2>
+                    </div>
+                    <span id="selected-vehicle-title" class="rounded-md border border-amber-300/20 bg-amber-300/10 px-3 py-2 text-xs font-bold text-amber-200">
+                        Selecione um veiculo
+                    </span>
+                </div>
+
+                <form id="service-form" class="hidden mb-5 grid grid-cols-1 gap-3 rounded-md border border-white/10 bg-slate-900/70 p-4 md:grid-cols-2">
+                    <input type="hidden" id="service-id">
+                    <label class="block md:col-span-2">
+                        <span class="text-[10px] font-black uppercase tracking-widest text-slate-500">Descricao do Servico</span>
+                        <input type="text" id="service-name" required class="mt-1 w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white outline-none transition focus:border-amber-300">
+                    </label>
+
+                    <label class="block">
+                        <span class="text-[10px] font-black uppercase tracking-widest text-slate-500">Categoria</span>
+                        <select id="service-category" class="mt-1 w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white outline-none transition focus:border-amber-300">
+                            <option value="Lavagem Premium">Lavagem Premium</option>
+                            <option value="Polimento/Correção">Polimento/Correcao</option>
+                            <option value="Higienização Interna">Higienizacao Interna</option>
+                            <option value="Proteção (Cerâmica/PPF)">Protecao (Ceramica/PPF)</option>
+                        </select>
+                    </label>
+
+                    <label class="block">
+                        <span class="text-[10px] font-black uppercase tracking-widest text-slate-500">Status</span>
+                        <select id="service-status" class="mt-1 w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white outline-none transition focus:border-amber-300">
+                            <option value="Na Fila">Na Fila</option>
+                            <option value="Em Andamento">Em Andamento</option>
+                            <option value="Pronto para Entrega">Pronto para Entrega</option>
+                        </select>
+                    </label>
+
+                    <label class="block">
+                        <span class="text-[10px] font-black uppercase tracking-widest text-slate-500">Preco (R$)</span>
+                        <input type="number" step="0.01" id="service-price" required class="mt-1 w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white outline-none transition focus:border-amber-300">
+                    </label>
+
+                    <label class="block">
+                        <span class="text-[10px] font-black uppercase tracking-widest text-slate-500">Tempo (minutos)</span>
+                        <input type="number" id="service-time" required class="mt-1 w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white outline-none transition focus:border-amber-300">
+                    </label>
+
+                    <div class="flex flex-col gap-2 pt-2 sm:flex-row sm:justify-end md:col-span-2">
+                        <button type="button" id="btn-cancel-service" class="rounded-md border border-white/10 bg-slate-800 px-4 py-2 text-xs font-black uppercase text-slate-200 transition hover:bg-slate-700">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="rounded-md bg-amber-300 px-4 py-2 text-xs font-black uppercase text-slate-950 transition hover:bg-amber-200">
+                            Salvar Servico
+                        </button>
+                    </div>
+                </form>
+
+                <div class="overflow-x-auto rounded-md border border-white/10">
+                    <table class="min-w-full text-left text-sm">
+                        <thead class="bg-slate-900 text-xs uppercase tracking-wider text-slate-400">
+                            <tr>
+                                <th class="px-4 py-3">Servico</th>
+                                <th class="px-4 py-3">Preco</th>
+                                <th class="px-4 py-3">Tempo</th>
+                                <th class="px-4 py-3">Status</th>
+                                <th class="px-4 py-3 text-right">Acoes</th>
+                            </tr>
+                        </thead>
+                        <tbody id="services-table-body" class="divide-y divide-white/10 bg-slate-950/40">
+                            <tr>
+                                <td colspan="5" class="px-4 py-8 text-center text-slate-500">Aguardando selecao de veiculo.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+</body>
+</html>
